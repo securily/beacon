@@ -8,7 +8,7 @@ In an increasingly complex digital landscape, organizations are faced with the c
 
 This project introduces a comprehensive standard for cybersecurity testing prioritization, segmented into three key tiers:
 
-1. **[Tier 1: Critical Threat Management](tiers/tier-1-critical-threat-management.md)**
+1. **[Tier 1: High Priority](tiers/tier-1-critical-threat-management.md)**
    Focuses on the most pressing vulnerabilities that pose significant risks to an organization's security. These include critical vulnerabilities that, if exploited, could lead to severe data breaches, financial loss, or operational disruption.
 
 2. **[Tier 2: Regulatory](tiers/tier-2-regulatory.md)**

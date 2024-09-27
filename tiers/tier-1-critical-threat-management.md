@@ -1,4 +1,4 @@
-# Tier 1: Critical Threat Management
+# Tier 1: High Priority
 
 ## Objective
 Address immediate and high-risk vulnerabilities that could lead to severe security breaches. This category includes issues that require prompt action due to their potential to cause significant harm.

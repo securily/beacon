@@ -1,0 +1,874 @@
+{
+  "name": "Beacon Security Standards",
+  "version": "1.1.0",
+  "description": "Open framework for categorising and prioritising cybersecurity findings. Three tiers, four domains, one decision procedure.",
+  "license": "GPL-3.0",
+  "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.en.html",
+  "publisher": "Penti.ai",
+  "repository": "https://github.com/securily/beacon",
+  "homepage": "https://beaconstandards.com",
+  "identifierFormat": {
+    "pattern": "BCN-T{tier}-{DOMAIN}-{sequence}",
+    "example": "BCN-T1-NET-001",
+    "stability": "Identifiers are permanent. A finding class may be reworded, re-mapped, or superseded, but its identifier is never reused or renumbered."
+  },
+
+  "tiers": [
+    {
+      "id": 1,
+      "code": "T1",
+      "name": "Critical",
+      "sla": "24-72 hours",
+      "slaHours": 72,
+      "escalation": "CISO and executive sponsor notified at 48 hours",
+      "intent": "Stop active bleeding",
+      "test": "Could an external attacker use this to gain access, escalate privilege, or take data today, without an insider and without a chain of unlikely events?",
+      "cvssGuide": "7.0-10.0, but exploitation evidence outranks score",
+      "budgetedFrom": "Unplanned work - pre-empts sprint commitments",
+      "documentation": "tiers/tier-1-critical-threat-management.md"
+    },
+    {
+      "id": 2,
+      "code": "T2",
+      "name": "Regulatory",
+      "sla": "30 days",
+      "slaHours": 720,
+      "escalation": "Security manager review at 14 days",
+      "intent": "Maintain the licence to operate",
+      "test": "Would a named auditor, regulator, or contractual counterparty record this as a deficiency?",
+      "cvssGuide": "4.0-6.9, or any score where a control is mandated",
+      "budgetedFrom": "Planned work - scheduled against the audit calendar",
+      "documentation": "tiers/tier-2-regulatory.md"
+    },
+    {
+      "id": 3,
+      "code": "T3",
+      "name": "Best Practices",
+      "sla": "90 days",
+      "slaHours": 2160,
+      "escalation": "Reviewed at quarterly planning; may be formally deferred",
+      "intent": "Reduce the rate at which the first two tiers refill",
+      "test": "Does fixing this reduce the number or severity of future Tier 1 and Tier 2 findings?",
+      "cvssGuide": "0.1-3.9",
+      "budgetedFrom": "Planned work - a standing percentage of engineering capacity",
+      "documentation": "tiers/tier-3-best-practices.md"
+    }
+  ],
+
+  "domains": [
+    {
+      "id": "network",
+      "code": "NET",
+      "name": "Network",
+      "question": "What can be reached, and from where?",
+      "typicalOwner": "Network engineering / cloud platform",
+      "directory": "network/"
+    },
+    {
+      "id": "iam",
+      "code": "IAM",
+      "name": "Identity & Access Management",
+      "question": "Who can act, and how strongly is that proven?",
+      "typicalOwner": "Identity engineering / IT operations",
+      "directory": "identity-and-access-management/"
+    },
+    {
+      "id": "data",
+      "code": "DAT",
+      "name": "Data Protection",
+      "question": "What happens to the data if everything else fails?",
+      "typicalOwner": "Data platform / application engineering",
+      "directory": "data/"
+    },
+    {
+      "id": "processing",
+      "code": "PRC",
+      "name": "Processing Protection",
+      "question": "Is the compute that runs the business trustworthy and available?",
+      "typicalOwner": "Platform engineering / SRE",
+      "directory": "processing-protection/"
+    }
+  ],
+
+  "classificationProcedure": {
+    "documentation": "CLASSIFICATION.md",
+    "rule": "Apply in order; stop at the first question answered yes.",
+    "questions": [
+      {
+        "order": 1,
+        "question": "Is it reachable by an untrusted party right now?",
+        "ifNo": "Skip to question 3"
+      },
+      {
+        "order": 2,
+        "question": "Does exploitation grant access, privilege, or data without an unlikely chain of events?",
+        "ifYes": "Tier 1",
+        "ifNo": "Continue to question 3"
+      },
+      {
+        "order": 3,
+        "question": "Would a named auditor, regulator, or contractual counterparty record it as a deficiency?",
+        "ifYes": "Tier 2",
+        "ifNo": "Continue to question 4"
+      },
+      {
+        "order": 4,
+        "question": "Does fixing it reduce the number or severity of future Tier 1 and Tier 2 findings?",
+        "ifYes": "Tier 3",
+        "ifNo": "Not a Beacon finding"
+      }
+    ]
+  },
+
+  "findings": [
+    {
+      "id": "BCN-T1-NET-001",
+      "tier": 1,
+      "domain": "network",
+      "name": "Internet-Exposed Remote Administration Services",
+      "summary": "SSH, RDP, SMB, or equivalent management protocols reachable from the public internet.",
+      "sla": "24 hours",
+      "documentation": "network/critical-open-ports.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1190", "name": "Exploit Public-Facing Application" },
+          { "id": "T1133", "name": "External Remote Services" },
+          { "id": "T1110", "name": "Brute Force" }
+        ],
+        "cwe": [{ "id": "CWE-284", "name": "Improper Access Control" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "1.4.2" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.20" },
+          { "framework": "NIST CSF 2.0", "control": "PR.AA-05" },
+          { "framework": "SOC 2", "control": "CC6.6" }
+        ]
+      },
+      "scanners": ["Nmap", "Nessus", "Shodan", "Nuclei", "PROWLER"]
+    },
+    {
+      "id": "BCN-T1-NET-002",
+      "tier": 1,
+      "domain": "network",
+      "name": "Publicly Accessible Storage and Data Services",
+      "summary": "Object storage, file shares, or managed data services readable without authentication from the internet.",
+      "sla": "24 hours",
+      "documentation": "network/publicly-accessible-resources.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1530", "name": "Data from Cloud Storage" },
+          { "id": "T1619", "name": "Cloud Storage Object Discovery" }
+        ],
+        "cwe": [{ "id": "CWE-1188", "name": "Insecure Default Initialization of Resource" }],
+        "compliance": [
+          { "framework": "GDPR", "control": "Art. 32" },
+          { "framework": "PCI DSS v4.0", "control": "1.4.4" },
+          { "framework": "HIPAA", "control": "164.312(a)(1)" },
+          { "framework": "SOC 2", "control": "CC6.1" }
+        ]
+      },
+      "scanners": ["PROWLER", "Cloudsploit", "ScoutSuite", "Nuclei"]
+    },
+    {
+      "id": "BCN-T1-NET-003",
+      "tier": 1,
+      "domain": "network",
+      "name": "No Segmentation Between Trust Zones",
+      "summary": "A compromise of any low-value host grants unrestricted network reachability to critical systems.",
+      "sla": "72 hours",
+      "documentation": "network/lack-of-firewalls.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1021", "name": "Remote Services" },
+          { "id": "T1210", "name": "Exploitation of Remote Services" },
+          { "id": "T1570", "name": "Lateral Tool Transfer" }
+        ],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "1.2.1" },
+          { "framework": "NIST CSF 2.0", "control": "PR.IR-01" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.22" }
+        ]
+      },
+      "scanners": ["Nmap", "Nessus", "PROWLER", "ScoutSuite"]
+    },
+    {
+      "id": "BCN-T1-IAM-001",
+      "tier": 1,
+      "domain": "iam",
+      "name": "Missing MFA on Privileged Accounts",
+      "summary": "Administrative, root, or break-glass accounts authenticate with a single factor.",
+      "sla": "24 hours",
+      "documentation": "identity-and-access-management/mandatory-mfa.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1078", "name": "Valid Accounts" },
+          { "id": "T1110", "name": "Brute Force" },
+          { "id": "T1621", "name": "Multi-Factor Authentication Request Generation" }
+        ],
+        "cwe": [{ "id": "CWE-308", "name": "Use of Single-factor Authentication" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "8.4.2 / 8.5.1" },
+          { "framework": "NIST CSF 2.0", "control": "PR.AA-03" },
+          { "framework": "SOC 2", "control": "CC6.1" },
+          { "framework": "HIPAA", "control": "164.312(d)" }
+        ]
+      },
+      "scanners": ["PROWLER", "ScoutSuite", "Nessus"]
+    },
+    {
+      "id": "BCN-T1-IAM-002",
+      "tier": 1,
+      "domain": "iam",
+      "name": "Excessive Standing Privilege",
+      "summary": "Accounts hold permanent administrative rights far beyond what their role requires.",
+      "sla": "48 hours",
+      "documentation": "identity-and-access-management/high-privilege-accounts.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1078.004", "name": "Valid Accounts: Cloud Accounts" },
+          { "id": "T1098", "name": "Account Manipulation" }
+        ],
+        "cwe": [{ "id": "CWE-269", "name": "Improper Privilege Management" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "7.2.1" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.2" },
+          { "framework": "SOC 2", "control": "CC6.3" }
+        ]
+      },
+      "scanners": ["PROWLER", "Cloudsploit", "ScoutSuite", "BloodHound"]
+    },
+    {
+      "id": "BCN-T1-IAM-003",
+      "tier": 1,
+      "domain": "iam",
+      "name": "Long-Lived Privileged Credentials",
+      "summary": "Privileged API keys, access keys, or service credentials that never expire and are not rotated.",
+      "sla": "72 hours",
+      "documentation": "identity-and-access-management/secure-password-policies.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1552", "name": "Unsecured Credentials" },
+          { "id": "T1552.001", "name": "Credentials In Files" },
+          { "id": "T1078.004", "name": "Valid Accounts: Cloud Accounts" }
+        ],
+        "cwe": [{ "id": "CWE-798", "name": "Use of Hard-coded Credentials" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "8.3.9 / 8.6.3" },
+          { "framework": "NIST CSF 2.0", "control": "PR.AA-01" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.17" }
+        ]
+      },
+      "scanners": ["TruffleHog", "Gitleaks", "PROWLER", "Cloudsploit"]
+    },
+    {
+      "id": "BCN-T1-DAT-001",
+      "tier": 1,
+      "domain": "data",
+      "name": "Injection Flaws on Internet-Facing Applications",
+      "summary": "SQL, NoSQL, OS command, or template injection reachable from an unauthenticated request.",
+      "sla": "24 hours",
+      "documentation": "data/critical-database-protection-issues.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1190", "name": "Exploit Public-Facing Application" },
+          { "id": "T1059", "name": "Command and Scripting Interpreter" }
+        ],
+        "cwe": [
+          { "id": "CWE-89", "name": "SQL Injection" },
+          { "id": "CWE-78", "name": "OS Command Injection" }
+        ],
+        "owasp": ["A03:2021 - Injection"],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "6.2.4" },
+          { "framework": "GDPR", "control": "Art. 32" },
+          { "framework": "SOC 2", "control": "CC7.1" }
+        ]
+      },
+      "scanners": ["Burp Suite", "OWASP ZAP", "sqlmap", "Nuclei", "Semgrep"]
+    },
+    {
+      "id": "BCN-T1-DAT-002",
+      "tier": 1,
+      "domain": "data",
+      "name": "Unauthenticated Database Endpoints",
+      "summary": "MongoDB, Redis, Elasticsearch, or similar services accepting internet connections with no authentication.",
+      "sla": "24 hours",
+      "documentation": "data/database-security.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1530", "name": "Data from Cloud Storage" },
+          { "id": "T1213", "name": "Data from Information Repositories" },
+          { "id": "T1485", "name": "Data Destruction" }
+        ],
+        "cwe": [{ "id": "CWE-306", "name": "Missing Authentication for Critical Function" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "8.2" },
+          { "framework": "HIPAA", "control": "164.312(a)(1)" },
+          { "framework": "GDPR", "control": "Art. 32" }
+        ]
+      },
+      "scanners": ["Nmap", "Shodan", "Nuclei", "Nessus"]
+    },
+    {
+      "id": "BCN-T1-DAT-003",
+      "tier": 1,
+      "domain": "data",
+      "name": "Unencrypted Sensitive Data at Rest",
+      "summary": "Regulated or business-critical data stored without encryption on systems exposed to compromise.",
+      "sla": "48 hours",
+      "documentation": "data/database-security.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1530", "name": "Data from Cloud Storage" },
+          { "id": "T1005", "name": "Data from Local System" }
+        ],
+        "cwe": [{ "id": "CWE-311", "name": "Missing Encryption of Sensitive Data" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "3.5.1" },
+          { "framework": "HIPAA", "control": "164.312(a)(2)(iv)" },
+          { "framework": "GDPR", "control": "Art. 32(1)(a)" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.24" }
+        ]
+      },
+      "scanners": ["PROWLER", "Cloudsploit", "ScoutSuite", "Nessus"]
+    },
+    {
+      "id": "BCN-T1-PRC-001",
+      "tier": 1,
+      "domain": "processing",
+      "name": "Known-Exploited Vulnerabilities",
+      "summary": "Unpatched CVEs with confirmed exploitation in the wild, on systems an attacker can reach.",
+      "sla": "24 hours",
+      "documentation": "processing-protection/known-exploited-vulnerabilities.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1190", "name": "Exploit Public-Facing Application" },
+          { "id": "T1203", "name": "Exploitation for Client Execution" },
+          { "id": "T1068", "name": "Exploitation for Privilege Escalation" }
+        ],
+        "cwe": [{ "id": "CWE-1035", "name": "Using Components with Known Vulnerabilities" }],
+        "owasp": ["A06:2021 - Vulnerable and Outdated Components"],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "6.3.3" },
+          { "framework": "NIST CSF 2.0", "control": "ID.RA-01" },
+          { "framework": "SOC 2", "control": "CC7.1" }
+        ]
+      },
+      "scanners": ["Nessus", "Qualys", "Nuclei", "Trivy", "Grype"]
+    },
+    {
+      "id": "BCN-T1-PRC-002",
+      "tier": 1,
+      "domain": "processing",
+      "name": "Exposed Management and Orchestration Interfaces",
+      "summary": "Kubernetes dashboards, CI/CD consoles, hypervisor managers, or admin panels reachable from the internet.",
+      "sla": "24 hours",
+      "documentation": "processing-protection/unprotected-external-exposure.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1133", "name": "External Remote Services" },
+          { "id": "T1610", "name": "Deploy Container" }
+        ],
+        "cwe": [{ "id": "CWE-284", "name": "Improper Access Control" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "2.2.7" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.20" },
+          { "framework": "NIST CSF 2.0", "control": "PR.AA-05" }
+        ]
+      },
+      "scanners": ["Nmap", "Shodan", "Nuclei", "kube-bench", "Trivy"]
+    },
+    {
+      "id": "BCN-T1-PRC-003",
+      "tier": 1,
+      "domain": "processing",
+      "name": "No Availability Protection on Revenue-Critical Services",
+      "summary": "Business-critical services with no rate limiting, no DDoS mitigation, and no capacity isolation.",
+      "sla": "48 hours",
+      "documentation": "processing-protection/ddos-protection.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1498", "name": "Network Denial of Service" },
+          { "id": "T1499", "name": "Endpoint Denial of Service" }
+        ],
+        "cwe": [{ "id": "CWE-770", "name": "Allocation of Resources Without Limits or Throttling" }],
+        "compliance": [
+          { "framework": "NIST CSF 2.0", "control": "PR.IR-04" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.6" },
+          { "framework": "SOC 2", "control": "A1.1" }
+        ]
+      },
+      "scanners": ["k6", "Burp Suite", "Nuclei", "PROWLER"]
+    },
+
+    {
+      "id": "BCN-T2-NET-001",
+      "tier": 2,
+      "domain": "network",
+      "name": "Regulated Environment Segmentation Gaps",
+      "summary": "Insufficient isolation around a cardholder, health, or otherwise regulated data environment.",
+      "sla": "30 days",
+      "documentation": "network/regulatory-network-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1021", "name": "Remote Services" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "1.2.1 / 11.4.5" },
+          { "framework": "HIPAA", "control": "164.312(a)" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.22" }
+        ]
+      },
+      "scanners": ["Nmap", "Nessus", "manual segmentation testing"]
+    },
+    {
+      "id": "BCN-T2-NET-002",
+      "tier": 2,
+      "domain": "network",
+      "name": "Insufficient Logging and Retention",
+      "summary": "Security-relevant events are not captured, not centralised, or not retained for the required period.",
+      "sla": "30 days",
+      "documentation": "network/regulatory-network-compliance.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1562.008", "name": "Impair Defenses: Disable Cloud Logs" },
+          { "id": "T1070", "name": "Indicator Removal" }
+        ],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "10.5.1" },
+          { "framework": "SOC 2", "control": "CC7.2" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.15" },
+          { "framework": "HIPAA", "control": "164.312(b)" }
+        ]
+      },
+      "scanners": ["PROWLER", "Cloudsploit", "ScoutSuite"]
+    },
+    {
+      "id": "BCN-T2-NET-003",
+      "tier": 2,
+      "domain": "network",
+      "name": "Missing Intrusion Detection Coverage",
+      "summary": "No detection capability at network boundaries or across critical segments.",
+      "sla": "30 days",
+      "documentation": "network/regulatory-network-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1562.001", "name": "Impair Defenses: Disable or Modify Tools" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "11.5.1" },
+          { "framework": "NIST CSF 2.0", "control": "DE.CM-01" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.16" }
+        ]
+      },
+      "scanners": ["Suricata", "Zeek", "GuardDuty", "PROWLER"]
+    },
+    {
+      "id": "BCN-T2-IAM-001",
+      "tier": 2,
+      "domain": "iam",
+      "name": "Non-Compliant Authentication Policy",
+      "summary": "Password and authentication settings that do not meet the applicable regulatory standard.",
+      "sla": "30 days",
+      "documentation": "identity-and-access-management/regulatory-iam-compliance.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1110", "name": "Brute Force" },
+          { "id": "T1078", "name": "Valid Accounts" }
+        ],
+        "cwe": [{ "id": "CWE-521", "name": "Weak Password Requirements" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "8.3.6" },
+          { "framework": "NIST SP 800-63B", "control": "5.1.1" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.17" },
+          { "framework": "SOC 2", "control": "CC6.1" }
+        ]
+      },
+      "scanners": ["PROWLER", "ScoutSuite"]
+    },
+    {
+      "id": "BCN-T2-IAM-002",
+      "tier": 2,
+      "domain": "iam",
+      "name": "Missing Periodic Access Reviews",
+      "summary": "No recurring, evidenced certification that granted access remains appropriate.",
+      "sla": "30 days",
+      "documentation": "identity-and-access-management/regulatory-iam-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1078", "name": "Valid Accounts" }],
+        "compliance": [
+          { "framework": "SOC 2", "control": "CC6.2 / CC6.3" },
+          { "framework": "PCI DSS v4.0", "control": "7.2.4" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.18" }
+        ]
+      },
+      "scanners": ["Entra ID access reviews", "AWS IAM Access Analyzer"]
+    },
+    {
+      "id": "BCN-T2-IAM-003",
+      "tier": 2,
+      "domain": "iam",
+      "name": "Ungoverned Service Accounts",
+      "summary": "Non-human identities without owners, documented purpose, or lifecycle management.",
+      "sla": "30 days",
+      "documentation": "identity-and-access-management/regulatory-iam-compliance.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1078.004", "name": "Valid Accounts: Cloud Accounts" },
+          { "id": "T1136", "name": "Create Account" }
+        ],
+        "compliance": [
+          { "framework": "SOC 2", "control": "CC6.1" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.16" },
+          { "framework": "PCI DSS v4.0", "control": "8.6.1" }
+        ]
+      },
+      "scanners": ["PROWLER", "ScoutSuite"]
+    },
+    {
+      "id": "BCN-T2-DAT-001",
+      "tier": 2,
+      "domain": "data",
+      "name": "Encryption Below Regulatory Standard",
+      "summary": "Data is encrypted, but with algorithms, key lengths, or key management that fail the applicable requirement.",
+      "sla": "30 days",
+      "documentation": "data/regulatory-data-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1040", "name": "Network Sniffing" }],
+        "cwe": [{ "id": "CWE-327", "name": "Use of a Broken or Risky Cryptographic Algorithm" }],
+        "owasp": ["A02:2021 - Cryptographic Failures"],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "3.6 / 3.7" },
+          { "framework": "HIPAA", "control": "164.312(e)(1)" },
+          { "framework": "GDPR", "control": "Art. 32(1)(a)" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.24" }
+        ]
+      },
+      "scanners": ["testssl.sh", "SSL Labs", "Nessus", "PROWLER"]
+    },
+    {
+      "id": "BCN-T2-DAT-002",
+      "tier": 2,
+      "domain": "data",
+      "name": "Retention and Deletion Non-Compliance",
+      "summary": "Personal or regulated data kept beyond its lawful basis, or deletion requests not honoured throughout.",
+      "sla": "30 days",
+      "documentation": "data/regulatory-data-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1213", "name": "Data from Information Repositories" }],
+        "compliance": [
+          { "framework": "GDPR", "control": "Art. 5(1)(e) / Art. 17" },
+          { "framework": "PCI DSS v4.0", "control": "3.2.1" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.33" }
+        ]
+      },
+      "scanners": ["Macie", "Purview"]
+    },
+    {
+      "id": "BCN-T2-DAT-003",
+      "tier": 2,
+      "domain": "data",
+      "name": "Absent Data Classification",
+      "summary": "No scheme identifying which data is sensitive, where it lives, and which controls apply.",
+      "sla": "30 days",
+      "documentation": "data/regulatory-data-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1213", "name": "Data from Information Repositories" }],
+        "compliance": [
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.12" },
+          { "framework": "GDPR", "control": "Art. 30" },
+          { "framework": "SOC 2", "control": "CC3.2" }
+        ]
+      },
+      "scanners": ["Macie", "Purview", "BigID"]
+    },
+    {
+      "id": "BCN-T2-PRC-001",
+      "tier": 2,
+      "domain": "processing",
+      "name": "Vulnerability Management Process Gaps",
+      "summary": "No defined scanning cadence, remediation SLA, or exception process - or incomplete asset coverage.",
+      "sla": "30 days",
+      "documentation": "processing-protection/regulatory-processing-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1190", "name": "Exploit Public-Facing Application" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "11.3" },
+          { "framework": "SOC 2", "control": "CC7.1" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.8" },
+          { "framework": "NIST CSF 2.0", "control": "ID.RA-01" }
+        ]
+      },
+      "scanners": ["Nessus", "Qualys", "Trivy", "PROWLER"]
+    },
+    {
+      "id": "BCN-T2-PRC-002",
+      "tier": 2,
+      "domain": "processing",
+      "name": "Change Management Control Gaps",
+      "summary": "Production changes without review, approval, testing, or a recorded rollback path.",
+      "sla": "30 days",
+      "documentation": "processing-protection/regulatory-processing-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1195", "name": "Supply Chain Compromise" }],
+        "compliance": [
+          { "framework": "SOC 2", "control": "CC8.1" },
+          { "framework": "PCI DSS v4.0", "control": "6.5.1" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.32" }
+        ]
+      },
+      "scanners": ["CloudTrail analysis", "GitHub/GitLab audit logs"]
+    },
+    {
+      "id": "BCN-T2-PRC-003",
+      "tier": 2,
+      "domain": "processing",
+      "name": "Untested Incident Response Capability",
+      "summary": "No incident response plan, or a plan that has never been exercised.",
+      "sla": "30 days",
+      "documentation": "processing-protection/regulatory-processing-compliance.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1486", "name": "Data Encrypted for Impact" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "12.10.1 / 12.10.2" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.24" },
+          { "framework": "GDPR", "control": "Art. 33" },
+          { "framework": "SOC 2", "control": "CC7.4" }
+        ]
+      },
+      "scanners": ["tabletop exercise", "purple team assessment"]
+    },
+
+    {
+      "id": "BCN-T3-NET-001",
+      "tier": 3,
+      "domain": "network",
+      "name": "Non-Critical Service Exposure",
+      "summary": "Unnecessary services reachable on internal networks, expanding attack surface without immediate risk.",
+      "sla": "90 days",
+      "documentation": "network/non-critical-open-ports.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1046", "name": "Network Service Discovery" }],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "2.2.4" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.9" },
+          { "framework": "NIST CSF 2.0", "control": "PR.PS-01" }
+        ]
+      },
+      "scanners": ["Nmap", "Nessus", "OpenSCAP"]
+    },
+    {
+      "id": "BCN-T3-NET-002",
+      "tier": 3,
+      "domain": "network",
+      "name": "Cloud Network Hardening Gaps",
+      "summary": "Cloud network configuration diverging from CIS Benchmark or provider best practice.",
+      "sla": "90 days",
+      "documentation": "network/hardening-of-cloud-resources.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1580", "name": "Cloud Infrastructure Discovery" }],
+        "compliance": [
+          { "framework": "CIS Benchmarks", "control": "Cloud Foundations - networking" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.9" },
+          { "framework": "NIST CSF 2.0", "control": "PR.PS-01" }
+        ]
+      },
+      "scanners": ["PROWLER", "Cloudsploit", "ScoutSuite", "Steampipe"]
+    },
+    {
+      "id": "BCN-T3-NET-003",
+      "tier": 3,
+      "domain": "network",
+      "name": "Incomplete Egress Filtering",
+      "summary": "Unrestricted outbound connectivity, permitting unconstrained command-and-control and exfiltration.",
+      "sla": "90 days",
+      "documentation": "network/hardening-of-cloud-resources.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1071", "name": "Application Layer Protocol" },
+          { "id": "T1041", "name": "Exfiltration Over C2 Channel" },
+          { "id": "T1048", "name": "Exfiltration Over Alternative Protocol" }
+        ],
+        "compliance": [
+          { "framework": "PCI DSS v4.0", "control": "1.3.2" },
+          { "framework": "NIST CSF 2.0", "control": "PR.IR-01" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.20" }
+        ]
+      },
+      "scanners": ["flow log analysis", "PROWLER", "Zeek"]
+    },
+    {
+      "id": "BCN-T3-IAM-001",
+      "tier": 3,
+      "domain": "iam",
+      "name": "Coarse-Grained Role Design",
+      "summary": "Roles that are scoped but still broader than the tasks they support.",
+      "sla": "90 days",
+      "documentation": "identity-and-access-management/rbac.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1078", "name": "Valid Accounts" }],
+        "cwe": [{ "id": "CWE-269", "name": "Improper Privilege Management" }],
+        "compliance": [
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.2" },
+          { "framework": "SOC 2", "control": "CC6.3" },
+          { "framework": "NIST CSF 2.0", "control": "PR.AA-05" }
+        ]
+      },
+      "scanners": ["IAM Access Analyzer", "PROWLER"]
+    },
+    {
+      "id": "BCN-T3-IAM-002",
+      "tier": 3,
+      "domain": "iam",
+      "name": "Manual Credential Lifecycle",
+      "summary": "Credential provisioning, rotation, and revocation performed by hand rather than automatically.",
+      "sla": "90 days",
+      "documentation": "identity-and-access-management/secure-credential-management.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1552", "name": "Unsecured Credentials" }],
+        "compliance": [
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.17" },
+          { "framework": "NIST CSF 2.0", "control": "PR.AA-01" },
+          { "framework": "SOC 2", "control": "CC6.1" }
+        ]
+      },
+      "scanners": ["Vault audit", "AWS Secrets Manager", "PROWLER"]
+    },
+    {
+      "id": "BCN-T3-IAM-003",
+      "tier": 3,
+      "domain": "iam",
+      "name": "Fragmented Identity Federation",
+      "summary": "Applications with local accounts outside the central identity provider.",
+      "sla": "90 days",
+      "documentation": "identity-and-access-management/rbac.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1078", "name": "Valid Accounts" }],
+        "compliance": [
+          { "framework": "ISO/IEC 27001:2022", "control": "A.5.16" },
+          { "framework": "SOC 2", "control": "CC6.1" },
+          { "framework": "NIST CSF 2.0", "control": "PR.AA-01" }
+        ]
+      },
+      "scanners": ["identity provider application inventory", "SaaS discovery tooling"]
+    },
+    {
+      "id": "BCN-T3-DAT-001",
+      "tier": 3,
+      "domain": "data",
+      "name": "No Data Loss Prevention Coverage",
+      "summary": "No technical control detecting or preventing sensitive data leaving approved channels.",
+      "sla": "90 days",
+      "documentation": "data/data-handling-best-practices.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1048", "name": "Exfiltration Over Alternative Protocol" },
+          { "id": "T1567", "name": "Exfiltration Over Web Service" }
+        ],
+        "compliance": [
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.12" },
+          { "framework": "GDPR", "control": "Art. 32" },
+          { "framework": "SOC 2", "control": "CC6.7" }
+        ]
+      },
+      "scanners": ["Purview DLP", "Google Workspace DLP", "endpoint DLP agents"]
+    },
+    {
+      "id": "BCN-T3-DAT-002",
+      "tier": 3,
+      "domain": "data",
+      "name": "Unverified Backup Restoration",
+      "summary": "Backups are taken but restoration has never been tested end to end.",
+      "sla": "90 days",
+      "documentation": "data/data-handling-best-practices.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1490", "name": "Inhibit System Recovery" },
+          { "id": "T1486", "name": "Data Encrypted for Impact" }
+        ],
+        "compliance": [
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.13" },
+          { "framework": "SOC 2", "control": "A1.2" },
+          { "framework": "HIPAA", "control": "164.308(a)(7)" }
+        ]
+      },
+      "scanners": ["backup platform reporting", "restoration testing"]
+    },
+    {
+      "id": "BCN-T3-DAT-003",
+      "tier": 3,
+      "domain": "data",
+      "name": "Database Configuration Hardening",
+      "summary": "Database settings diverging from benchmark without creating direct exposure.",
+      "sla": "90 days",
+      "documentation": "data/data-handling-best-practices.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1213", "name": "Data from Information Repositories" }],
+        "cwe": [{ "id": "CWE-209", "name": "Generation of Error Message Containing Sensitive Information" }],
+        "compliance": [
+          { "framework": "CIS Benchmarks", "control": "database engine benchmark" },
+          { "framework": "PCI DSS v4.0", "control": "2.2.1" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.9" }
+        ]
+      },
+      "scanners": ["CIS-CAT", "Nessus", "OpenSCAP"]
+    },
+    {
+      "id": "BCN-T3-PRC-001",
+      "tier": 3,
+      "domain": "processing",
+      "name": "Container and Image Hardening",
+      "summary": "Containers running as root, from oversized base images, or without runtime constraints.",
+      "sla": "90 days",
+      "documentation": "processing-protection/processing-security-best-practices.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1610", "name": "Deploy Container" },
+          { "id": "T1611", "name": "Escape to Host" }
+        ],
+        "cwe": [{ "id": "CWE-250", "name": "Execution with Unnecessary Privileges" }],
+        "compliance": [
+          { "framework": "CIS Benchmarks", "control": "Docker / Kubernetes Benchmark" },
+          { "framework": "NIST SP 800-190", "control": "container security guidance" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.9" }
+        ]
+      },
+      "scanners": ["Trivy", "kube-bench", "Grype", "Docker Bench"]
+    },
+    {
+      "id": "BCN-T3-PRC-002",
+      "tier": 3,
+      "domain": "processing",
+      "name": "CI/CD Pipeline Hardening",
+      "summary": "Build pipelines without dependency pinning, artefact signing, or runner isolation.",
+      "sla": "90 days",
+      "documentation": "processing-protection/processing-security-best-practices.md",
+      "mappings": {
+        "mitreAttack": [
+          { "id": "T1195.002", "name": "Compromise Software Supply Chain" },
+          { "id": "T1552.004", "name": "Private Keys" }
+        ],
+        "cwe": [{ "id": "CWE-1357", "name": "Reliance on Insufficiently Trustworthy Component" }],
+        "compliance": [
+          { "framework": "SLSA", "control": "Build track levels 2-3" },
+          { "framework": "SOC 2", "control": "CC8.1" },
+          { "framework": "NIST SSDF", "control": "PS.2 / PS.3" }
+        ]
+      },
+      "scanners": ["GitHub Actions audit", "Trivy", "Syft", "Cosign"]
+    },
+    {
+      "id": "BCN-T3-PRC-003",
+      "tier": 3,
+      "domain": "processing",
+      "name": "Infrastructure-as-Code Security Gaps",
+      "summary": "Infrastructure defined in code without security scanning, policy enforcement, or drift detection.",
+      "sla": "90 days",
+      "documentation": "processing-protection/processing-security-best-practices.md",
+      "mappings": {
+        "mitreAttack": [{ "id": "T1578", "name": "Modify Cloud Compute Infrastructure" }],
+        "compliance": [
+          { "framework": "NIST CSF 2.0", "control": "PR.PS-01" },
+          { "framework": "ISO/IEC 27001:2022", "control": "A.8.9" },
+          { "framework": "SOC 2", "control": "CC8.1" }
+        ]
+      },
+      "scanners": ["Checkov", "tfsec", "Terrascan", "PROWLER"]
+    }
+  ]
+}

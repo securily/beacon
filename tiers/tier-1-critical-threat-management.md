@@ -13,9 +13,27 @@ Tier 1 findings represent vulnerabilities that attackers actively exploit in the
 
 ### Why Tier 1 Matters
 
-- **73% of breaches** exploit vulnerabilities that were known and had patches available
-- **Average ransomware dwell time** is now under 24 hours from initial access to encryption
-- **Credential-based attacks** account for 61% of successful breaches
+Every figure below is traceable to a public primary source — see
+[SOURCES.md](../SOURCES.md).
+
+- **Exploitation as an entry point is growing sharply.** The 2024 Verizon DBIR
+  reported that exploitation of vulnerabilities as a path to initiate a breach
+  almost tripled year over year, driven by mass exploitation of edge devices and
+  file-transfer software ([S1](../SOURCES.md))
+- **Ransomware moves faster than most remediation SLAs.** Median dwell time
+  before ransomware deployment has fallen to roughly 24 hours, with a meaningful
+  share of cases completing in under a day ([S3](../SOURCES.md)). *This is the
+  reason the Tier 1 SLA is measured in hours: a remediation window longer than
+  the attack window is not a control.*
+- **The human element is involved in roughly two-thirds of breaches** — error,
+  privilege misuse, stolen credentials, or social engineering ([S5](../SOURCES.md)).
+  This is why MFA coverage and privilege scope sit at Tier 1 alongside software
+  vulnerabilities.
+- **Most CVEs are never exploited.** Roughly one in twenty published
+  vulnerabilities is ever observed being exploited, and remediating by CVSS score
+  alone performs little better than remediating at random ([S2](../SOURCES.md)).
+  *This is the empirical basis for tiering on reachability and observed
+  exploitation rather than on score.*
 
 ---
 
@@ -128,8 +146,9 @@ Overprivileged accounts are the crown jewels attackers pursue. A single compromi
 
 **Real-World Impact:**
 - SolarWinds attack leveraged privileged access for lateral movement
-- Colonial Pipeline attack exploited legacy VPN account without MFA
-- 80% of breaches involve privileged credential abuse
+- Colonial Pipeline attack exploited a legacy VPN account without MFA
+- The human element — including privilege misuse and stolen credentials — is
+  involved in roughly two-thirds of breaches ([S5](../SOURCES.md))
 
 **Detection Tools:**
 - [PROWLER](https://prowler.cloud/) - IAM best practices assessment

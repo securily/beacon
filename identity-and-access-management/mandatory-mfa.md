@@ -9,7 +9,15 @@
 
 ## Risk Description
 
-Multi-factor authentication (MFA) is the single most effective control against account compromise. Microsoft reports that MFA blocks 99.9% of automated attacks. Accounts without MFA are trivially compromised through credential stuffing, phishing, and password spraying.
+Multi-factor authentication (MFA) is the single most effective control against account compromise. Microsoft reports that MFA blocks over 99.9% of automated attacks ([S7](../SOURCES.md)). Accounts without MFA are trivially compromised through credential stuffing, phishing, and password spraying.
+
+> **Read the 99.9% correctly.** It applies to **automated, commodity attacks** —
+> credential stuffing, password spraying, bulk phishing. It does **not** apply to
+> adversary-in-the-middle phishing kits, MFA fatigue attacks, or SIM-swap against
+> SMS factors, all of which are now routine against targeted accounts. This is
+> exactly why privileged accounts require *phishing-resistant* MFA rather than
+> any MFA. Treating all second factors as equivalent is the most common mistake
+> made with this control.
 
 ### Business Impact
 - **Colonial Pipeline (2021):** Single compromised VPN account without MFA led to $4.4M ransom
@@ -17,13 +25,20 @@ Multi-factor authentication (MFA) is the single most effective control against a
 - **SolarWinds (2020):** Attackers leveraged accounts without proper MFA enforcement
 
 ### Attack Vectors Mitigated by MFA
-| Attack Type | MFA Effectiveness |
-|-------------|-------------------|
-| Credential stuffing | 99.9% blocked |
-| Password spraying | 99.9% blocked |
-| Phishing (standard) | 99.9% blocked |
-| Phishing (advanced) | 95%+ blocked with phishing-resistant MFA |
-| Brute force | 100% blocked |
+
+| Attack type | Any MFA | Phishing-resistant MFA (FIDO2) |
+|-------------|---------|-------------------------------|
+| Credential stuffing | Effective | Effective |
+| Password spraying | Effective | Effective |
+| Brute force | Effective | Effective |
+| Bulk / commodity phishing | Effective | Effective |
+| Adversary-in-the-middle phishing | **Bypassed** | Effective — credentials are origin-bound |
+| MFA fatigue / push bombing | **Bypassed** | Not applicable — no push to approve |
+| SIM swap | **Bypassed** (SMS) | Not applicable |
+
+The left column is where the widely-quoted 99.9% figure applies. The right column
+is why this finding requires **phishing-resistant** MFA on privileged accounts
+rather than accepting any second factor.
 
 ---
 

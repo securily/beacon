@@ -175,7 +175,7 @@ the typical case wrong, that is a tier change and a
 
 - **Vendor-specific findings** that only apply to one commercial product, unless
   the product is near-ubiquitous
-- **New tiers or domains.** Three and four respectively. Categorisation schemes
+- **New tiers or domains.** Three and four respectively. Categorization schemes
   fail by growing, and every addition creates boundary cases that cost more than
   the remediation would have.
 - **Findings without a remediation** — if there is nothing to do about it, it is
@@ -194,7 +194,7 @@ evidence, not from seniority.
 
 ---
 
-## Licence
+## License
 
 Contributions are accepted under [GPL-3.0](LICENSE). By submitting, you confirm
 you have the right to contribute the material.

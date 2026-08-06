@@ -1,6 +1,6 @@
 # Glossary
 
-Security vocabulary is imprecise, and imprecision in a categorisation framework
+Security vocabulary is imprecise, and imprecision in a categorization framework
 is expensive. Where a term has both a general meaning and a specific meaning
 inside Beacon, both are given.
 
@@ -56,7 +56,7 @@ exploitation in the wild.
 
 **In Beacon:** KEV membership combined with reachability places a finding in
 Tier 1 regardless of its CVSS score. Beacon treats observed exploitation as
-outranking modelled severity — see
+outranking modeled severity — see
 [BCN-T1-PRC-001](processing-protection/known-exploited-vulnerabilities.md).
 
 *See also: [EPSS](#epss), [CVSS](#cvss)*
@@ -109,7 +109,7 @@ the policy document says.
 The Exploit Prediction Scoring System, which estimates the probability that a
 given vulnerability will be exploited in the wild within the next thirty days.
 
-**In Beacon:** Helps prioritise within the Tier 1 queue and triage CVEs not yet
+**In Beacon:** Helps prioritize within the Tier 1 queue and triage CVEs not yet
 listed in KEV. An input to tier assignment, not a substitute for it — a
 probability does not name an owner or a deadline.
 
@@ -178,10 +178,10 @@ A knowledge base of adversary tactics and techniques derived from observed
 real-world intrusions, maintained by MITRE.
 
 **In Beacon:** Every Tier 1 catalog entry maps to the ATT&CK techniques that
-exploit it, which supports threat-informed prioritisation and lets detection
+exploit it, which supports threat-informed prioritization and lets detection
 engineering work from the same references as remediation.
 
-*See also: [Threat-informed defence](#threat-informed-defence)*
+*See also: [Threat-informed defense](#threat-informed-defense)*
 
 ---
 
@@ -254,12 +254,12 @@ production administrator rights is equivalent to phishing an administrator.
 
 ---
 
-### Threat-informed defence
+### Threat-informed defense
 
-Prioritising defensive work according to the techniques adversaries actually use,
+Prioritizing defensive work according to the techniques adversaries actually use,
 rather than according to theoretical severity.
 
-**In Beacon:** The organising principle behind Tier 1. Observed exploitation and
+**In Beacon:** The organizing principle behind Tier 1. Observed exploitation and
 real reachability determine urgency; intrinsic severity scores inform but do not
 decide.
 
@@ -273,7 +273,7 @@ The elapsed time between a finding being identified and being verifiably closed.
 Distinct from time to triage or time to acknowledge.
 
 **In Beacon:** SLAs measure time to remediate, **not** time to ticket.
-Programmes that measure acknowledgement report attainment figures that bear no
+Programs that measure acknowledgement report attainment figures that bear no
 relation to actual exposure.
 
 *See also: [Dwell time](#dwell-time), [SLA](#sla)*

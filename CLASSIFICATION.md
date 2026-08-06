@@ -197,7 +197,7 @@ describes your exposure.*
 → **Tier 1**
 
 *A mid-range score outranks a 9.8 because someone is actually using this one.
-Observed exploitation beats modelled severity.*
+Observed exploitation beats modeled severity.*
 
 ---
 
@@ -266,9 +266,9 @@ blast radius of every other compromise.*
 |--------------|----------------|------------|
 | **Evaluating compliance before reachability** | "Is this a compliance issue?" feels like the easier question | Follow the order. This is the reason the order exists. |
 | **Treating CVSS as the tier** | The score is already in the scanner output | A 9.8 with no reachability is Tier 2; a 6.5 in KEV on the edge is Tier 1 |
-| **Downgrading because an environment is labelled non-production** | The label is taken at face value | Dev databases are routinely seeded with production data and share credentials. Classify by data present and credentials accepted. |
+| **Downgrading because an environment is labeled non-production** | The label is taken at face value | Dev databases are routinely seeded with production data and share credentials. Classify by data present and credentials accepted. |
 | **Downgrading because a service is patched** | Patch state feels like it resolves the finding | An internet-facing SSH service with current patches is still Tier 1 until reachability is removed |
-| **Folding a Tier 1 finding into a Tier 3 programme** | It was discovered *during* the Tier 3 work | Exposed pipeline credentials found during CI/CD hardening are Tier 1. Record separately or you silently apply a 90-day SLA to a 72-hour problem. |
+| **Folding a Tier 1 finding into a Tier 3 program** | It was discovered *during* the Tier 3 work | Exposed pipeline credentials found during CI/CD hardening are Tier 1. Record separately or you silently apply a 90-day SLA to a 72-hour problem. |
 | **Importing a benchmark report wholesale at one tier** | The report has its own severity column | CIS output mixes genuine Tier 1 items with Tier 3 hygiene. Triage each item; the report's ratings are not tiers. |
 
 ---

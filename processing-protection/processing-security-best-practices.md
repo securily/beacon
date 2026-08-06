@@ -167,7 +167,7 @@ be protected by access controls. Where those have failed, the finding is higher:
 |-----------|--------------|
 | Pipeline console reachable from the internet | **Tier 1** — [BCN-T1-PRC-002](unprotected-external-exposure.md) |
 | Pipeline credentials exposed in a repository | **Tier 1** — [BCN-T1-IAM-003](../identity-and-access-management/secure-password-policies.md) |
-| Unpinned dependencies, unsigned artefacts, shared runners | **Tier 3** — this finding |
+| Unpinned dependencies, unsigned artifacts, shared runners | **Tier 3** — this finding |
 
 ### Detection
 
@@ -179,7 +179,7 @@ grep -rEn 'uses:\s+[^@]+@(v[0-9]+|main|master)$' .github/workflows/ \
 # Workflows triggered by forks that can access secrets
 grep -rln 'pull_request_target' .github/workflows/
 
-# Are artefacts signed?
+# Are artifacts signed?
 cosign verify --certificate-identity-regexp '.*' \
   --certificate-oidc-issuer-regexp '.*' \
   registry.example.com/myapp:latest 2>&1 | head -5
@@ -189,7 +189,7 @@ cosign verify --certificate-identity-regexp '.*' \
 
 - [ ] Third-party actions or dependencies pinned to mutable tags
 - [ ] Lockfiles not enforced in CI
-- [ ] Build artefacts unsigned, or signatures not verified at deployment
+- [ ] Build artifacts unsigned, or signatures not verified at deployment
 - [ ] Shared runners without isolation between jobs
 - [ ] Repository secrets accessible to fork-triggered workflows
 - [ ] No SBOM generated or retained
@@ -220,7 +220,7 @@ jobs:
         uses: anchore/sbom-action@v0
         with: { format: spdx-json, output-file: sbom.spdx.json }
 
-      - name: Sign artefact
+      - name: Sign artifact
         run: cosign sign --yes ${IMAGE}@${DIGEST}
 ```
 

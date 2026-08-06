@@ -57,7 +57,7 @@ themselves, but they systematically manufacture urgency elsewhere.
 | **PCI DSS v4.0** | 12.10.1 / 12.10.2 | Incident response plan, tested at least annually |
 | **SOC 2** | CC7.1 | Vulnerabilities identified, evaluated, and remediated |
 | **SOC 2** | CC7.4 / CC7.5 | Incident response and recovery procedures |
-| **SOC 2** | CC8.1 | Changes authorised, designed, tested, approved, and implemented |
+| **SOC 2** | CC8.1 | Changes authorized, designed, tested, approved, and implemented |
 | **ISO/IEC 27001:2022** | A.8.8 | Management of technical vulnerabilities |
 | **ISO/IEC 27001:2022** | A.8.32 | Change management |
 | **ISO/IEC 27001:2022** | A.5.24 / A.5.25 | Incident management planning and assessment |
@@ -192,7 +192,7 @@ Check that the plan actually contains:
 
 ### Phase 1 — Vulnerability management (Days 1–14)
 
-**Document the programme.** Scope, cadence, severity definitions, remediation
+**Document the program.** Scope, cadence, severity definitions, remediation
 timeframes, and the exception path.
 
 | Beacon tier | Remediation SLA | Framework alignment |
@@ -215,7 +215,7 @@ timeframes, and the exception path.
     exit-code: '1'          # fail the build; reporting alone is not a control
 ```
 
-**Formalise risk acceptance.** Every exception needs a named approver, an expiry
+**Formalize risk acceptance.** Every exception needs a named approver, an expiry
 date, and a compensating control. Perpetual undocumented exceptions are
 themselves a finding.
 
@@ -236,7 +236,7 @@ exception:
 1. **Route all production change through the pipeline.** Remove standing console
    write access and replace it with just-in-time elevation.
 2. **Enforce branch protection including for administrators.**
-3. **Capture evidence automatically** as pipeline artefacts rather than as
+3. **Capture evidence automatically** as pipeline artifacts rather than as
    manual records — manual evidence collection fails silently.
 4. **Define an emergency change path** with retrospective review, so urgent
    changes have a compliant route instead of an ad-hoc one.
@@ -295,7 +295,7 @@ resulting plan updates. **The update record is the evidence assessors want.**
 | Scan coverage reconciles to inventory | Reconciliation report with documented exclusions |
 | SLA attainment measured | Report by severity for the current period |
 | Exceptions governed | Register showing owner, compensating control, future expiry |
-| Change evidence retrievable | Ten sampled changes each producing review, approval, testing artefacts |
+| Change evidence retrievable | Ten sampled changes each producing review, approval, testing artifacts |
 | No unaccounted direct changes | Control-plane log analysis for the period |
 | IR plan current and tested | Plan with deadlines, plus a test record within the required period |
 | Post-test improvements applied | Change record showing plan updates after the exercise |
@@ -320,7 +320,7 @@ Where a process requirement cannot be met within 30 days:
 | Event | Action |
 |-------|--------|
 | Scheduled scan failed or skipped | Alert vulnerability management owner |
-| New asset without scanner coverage after 24h | Alert and auto-enrol |
+| New asset without scanner coverage after 24h | Alert and auto-enroll |
 | Tier 1 finding past SLA | Executive escalation |
 | Exception past review date | Daily report to compliance owner |
 | Production change outside pipeline | Alert and require retrospective justification |

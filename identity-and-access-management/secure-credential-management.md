@@ -296,7 +296,7 @@ developers can bypass them, and the one time it matters, someone will.
 Where a system genuinely cannot support automated rotation:
 
 1. Record the system, the credential, and the technical constraint
-2. Store the credential in the managed secret store regardless — centralised
+2. Store the credential in the managed secret store regardless — centralized
    custody has value even without automated rotation
 3. Apply the shortest practical manual rotation interval with a calendar owner
    **and** an automated age alert

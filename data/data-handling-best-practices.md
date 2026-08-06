@@ -10,12 +10,12 @@
 
 ## Risk Description
 
-Defence-in-depth for data: the controls that reduce blast radius and preserve
+Defense-in-depth for data: the controls that reduce blast radius and preserve
 recoverability once the preventive controls have already failed.
 
 None of these is urgent in isolation, and each requires substantial tuning to
 deploy without disrupting legitimate work — which is exactly the Tier 3 profile.
-The returns are real but gradual, and they are realised at the worst moment
+The returns are real but gradual, and they are realized at the worst moment
 rather than during normal operation.
 
 ### Scope of this finding
@@ -63,7 +63,7 @@ aws macie2 list-findings --max-results 50 \
 through each channel and see whether anything happens.
 
 ```
-Test artefact:  synthetic PAN 4111 1111 1111 1111 (a known test number)
+Test artifact:  synthetic PAN 4111 1111 1111 1111 (a known test number)
 
 Channel                          Detected?   Enforced?
 ─────────────────────────────────────────────────────
@@ -91,8 +91,8 @@ console reports.
 1. **Start with the highest-volume channel** — usually email or a single
    collaboration platform. Estate-wide rollouts stall.
 2. **Monitor first, tune against real traffic, then enforce.** Enforcing untuned
-   policy generates disruption and erodes organisational support for the whole
-   programme; recovering that support is harder than the original deployment.
+   policy generates disruption and erodes organizational support for the whole
+   program; recovering that support is harder than the original deployment.
 3. **Align rules to your classification scheme** rather than generic patterns.
 4. **Route alerts to a named owner** with a defined triage process.
 5. Extend to further channels once the first enforces cleanly.
@@ -347,7 +347,7 @@ resource "aws_db_parameter_group" "hardened" {
 | `BCN-T3-DAT-002` | Backups survive credential compromise | Object Lock in COMPLIANCE mode; deletion attempt denied |
 | `BCN-T3-DAT-003` | Benchmark target met | Assessment report with documented exceptions |
 | `BCN-T3-DAT-003` | Errors reveal no schema detail | Client-side error output from a malformed query |
-| `BCN-T3-DAT-003` | Audit events centralised | Sampled event retrievable from central log storage |
+| `BCN-T3-DAT-003` | Audit events centralized | Sampled event retrievable from central log storage |
 
 ---
 

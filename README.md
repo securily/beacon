@@ -1,6 +1,6 @@
 # Beacon Security Standards
 
-## A universal way to categorise and prioritise security findings
+## A universal way to categorize and prioritize security findings
 
 **Version 1.1.0** · [GPL-3.0](LICENSE) · Published by Penti.ai
 
@@ -9,13 +9,13 @@
 ## The problem
 
 Security teams do not struggle to *find* vulnerabilities. Scanners produce more
-findings than any organisation can remediate, and the constraint moved long ago
+findings than any organization can remediate, and the constraint moved long ago
 from detection to decision: which of these thousands of items matters this week,
 and who works on it.
 
 The industry default is to sort by CVSS. This fails because the base score
 describes the vulnerability in the abstract and is therefore **identical for
-every organisation on earth**. It cannot express whether the affected component
+every organization on earth**. It cannot express whether the affected component
 is reachable, whether anyone is exploiting it, or what sits behind it. Published
 research has repeatedly found that remediating by score alone performs little
 better than working the list at random ([SOURCES.md](SOURCES.md) S2).
@@ -71,7 +71,7 @@ Full procedure, six worked examples, and the six documented failure modes:
 
 A five-level severity scale fails because its middle levels carry no decision.
 Three tiers is the smallest number that captures genuinely different
-organisational responses — each maps to a different deadline, owner, and budget.
+organizational responses — each maps to a different deadline, owner, and budget.
 
 ### [Tier 1: Critical](tiers/tier-1-critical-threat-management.md) — 24–72 hours
 
@@ -86,7 +86,7 @@ commitments.
 
 ### [Tier 2: Regulatory](tiers/tier-2-regulatory.md) — 30 days
 
-*Maintain the licence to operate.*
+*Maintain the license to operate.*
 
 Threatens certification, contract, or regulatory standing. The consequence is not
 a breach but a finding in **someone else's report** — a qualified SOC 2 opinion,
@@ -179,7 +179,7 @@ different question, and Beacon consumes them as inputs.
 > A CVSS 9.8 with no reachability is **Tier 2**.
 > A CVSS 6.5 in the KEV catalog on an internet-facing host is **Tier 1**.
 >
-> Exploitation evidence outranks modelled severity.
+> Exploitation evidence outranks modeled severity.
 
 None of those systems names an owner or a deadline, and none covers the
 misconfigurations and identity gaps that carry no CVE at all — which in a modern
@@ -231,7 +231,7 @@ Full documentation: [Scanners and Frameworks](scanners-and-frameworks.md)
 
 ## Adopting Beacon
 
-Classifying a backlog takes a few days. Changing what the organisation *does*
+Classifying a backlog takes a few days. Changing what the organization *does*
 about it takes a quarter.
 
 | Phase | Outcome |
@@ -255,7 +255,7 @@ agreement that Tier 1 pre-empts planned work** — everything else is logistics.
 | Tier 1 SLA attainment | The headline number |
 | Tier 1 queue age (oldest open item) | One stale item does more credibility damage than a dozen recent ones |
 | Classification stability | High churn means the procedure is being applied inconsistently |
-| Tier 3 completion rate | A programme that never closes Tier 3 keeps refilling Tiers 1 and 2 |
+| Tier 3 completion rate | A program that never closes Tier 3 keeps refilling Tiers 1 and 2 |
 | Exceptions past review date | Should be zero; rarely is |
 
 ---
@@ -292,7 +292,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-## Licence
+## License
 
 [GNU General Public License v3.0](LICENSE).
 

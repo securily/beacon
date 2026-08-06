@@ -21,7 +21,7 @@ that quietly invalidates every document that ever cited it.
 | Consumer | Uses |
 |----------|------|
 | Beacon Analyzer (Lambda) | Finding classification and tier assignment |
-| Backend API | Categorisation endpoints |
+| Backend API | Categorization endpoints |
 | Dashboard | Tier and domain display |
 | Third parties | `beacon-catalog.json` under GPL-3.0 |
 
@@ -96,10 +96,10 @@ MAJOR . MINOR . PATCH
 
 ## Consumer contract
 
-### Required behaviour
+### Required behavior
 
 **Ignore unknown fields.** New optional fields are added in minor versions.
-Consumers that reject unrecognised fields will break on routine updates.
+Consumers that reject unrecognized fields will break on routine updates.
 
 ```python
 # Correct — tolerant of additive change
@@ -146,7 +146,7 @@ def resolve(finding_id, catalog):
     return f
 ```
 
-### Recommended behaviour
+### Recommended behavior
 
 - Cache the catalog; do not fetch per-finding
 - Log the catalog version alongside classification results, so historical

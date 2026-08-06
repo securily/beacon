@@ -61,7 +61,7 @@ paths.
 | **PCI DSS v4.0** | 3.6 / 3.7 | Documented key-management lifecycle; split knowledge and dual control |
 | **PCI DSS v4.0** | 3.2.1 | Retain account data only as long as necessary; documented retention policy |
 | **PCI DSS v4.0** | 4.2.1 | Strong cryptography for transmission over open networks |
-| **GDPR** | Art. 32(1)(a) | Encryption and pseudonymisation appropriate to risk |
+| **GDPR** | Art. 32(1)(a) | Encryption and pseudonymization appropriate to risk |
 | **GDPR** | Art. 5(1)(e) | Storage limitation — kept no longer than necessary |
 | **GDPR** | Art. 17 | Right to erasure, across all copies |
 | **GDPR** | Art. 30 | Records of processing activities |
@@ -322,7 +322,7 @@ Legacy systems that cannot support modern cryptography:
 1. Document the specific technical constraint and the affected data
 2. Isolate the system — network segmentation reduces exposure and often reduces
    assessment scope
-3. Apply a compensating control: tokenisation, an encrypting proxy, or
+3. Apply a compensating control: tokenization, an encrypting proxy, or
    application-layer encryption ahead of the legacy store
 4. Record a decommissioning date, not an indefinite exception
 5. Disclose to the assessor proactively

@@ -62,17 +62,17 @@ remediating one does not close the others.
 | **PCI DSS v4.0** | 7.2.4 | Review user accounts and access privileges at least every 6 months |
 | **PCI DSS v4.0** | 8.6.1 | Interactive use of system/service accounts is restricted and justified |
 | **PCI DSS v4.0** | 8.2.1 | Unique ID for every user with access to system components |
-| **SOC 2** | CC6.2 / CC6.3 | Access is registered, authorised, and periodically reviewed |
+| **SOC 2** | CC6.2 / CC6.3 | Access is registered, authorized, and periodically reviewed |
 | **ISO/IEC 27001:2022** | A.5.18 | Access rights reviewed, provisioned, and revoked per policy |
 | **ISO/IEC 27001:2022** | A.5.16 | Identity management across the full lifecycle |
 | **HIPAA** | §164.308(a)(4) | Information access management; periodic review |
-| **NIST SP 800-63B** | 5.1.1 | Memorised secret requirements — length over composition |
+| **NIST SP 800-63B** | 5.1.1 | Memorized secret requirements — length over composition |
 | **GDPR** | Art. 32 | Access appropriate to risk; demonstrable |
 
 ### A note on conflicting guidance
 
 NIST SP 800-63B now **discourages** mandatory periodic rotation and composition
-rules, on the evidence that both drive predictable user behaviour. PCI DSS v4.0
+rules, on the evidence that both drive predictable user behavior. PCI DSS v4.0
 continues to specify minimums.
 
 Where a policy must satisfy both, **the stricter requirement applies**. In
@@ -257,7 +257,7 @@ Update-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId $policy.Id -
 }
 ```
 
-### Phase 3 — Operationalise review (Days 21–30)
+### Phase 3 — Operationalize review (Days 21–30)
 
 | Access type | Cadence | Reviewer |
 |-------------|---------|----------|

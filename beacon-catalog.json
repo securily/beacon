@@ -1,7 +1,7 @@
 {
   "name": "Beacon Security Standards",
   "version": "1.1.0",
-  "description": "Open framework for categorising and prioritising cybersecurity findings. Three tiers, four domains, one decision procedure.",
+  "description": "Open framework for categorizing and prioritizing cybersecurity findings. Three tiers, four domains, one decision procedure.",
   "license": "GPL-3.0",
   "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.en.html",
   "publisher": "Penti.ai",
@@ -34,7 +34,7 @@
       "sla": "30 days",
       "slaHours": 720,
       "escalation": "Security manager review at 14 days",
-      "intent": "Maintain the licence to operate",
+      "intent": "Maintain the license to operate",
       "test": "Would a named auditor, regulator, or contractual counterparty record this as a deficiency?",
       "cvssGuide": "4.0-6.9, or any score where a control is mandated",
       "budgetedFrom": "Planned work - scheduled against the audit calendar",
@@ -423,7 +423,7 @@
       "tier": 2,
       "domain": "network",
       "name": "Insufficient Logging and Retention",
-      "summary": "Security-relevant events are not captured, not centralised, or not retained for the required period.",
+      "summary": "Security-relevant events are not captured, not centralized, or not retained for the required period.",
       "sla": "30 days",
       "documentation": "network/regulatory-network-compliance.md",
       "mappings": {
@@ -546,7 +546,7 @@
       "tier": 2,
       "domain": "data",
       "name": "Retention and Deletion Non-Compliance",
-      "summary": "Personal or regulated data kept beyond its lawful basis, or deletion requests not honoured throughout.",
+      "summary": "Personal or regulated data kept beyond its lawful basis, or deletion requests not honored throughout.",
       "sla": "30 days",
       "documentation": "data/regulatory-data-compliance.md",
       "mappings": {
@@ -835,7 +835,7 @@
       "tier": 3,
       "domain": "processing",
       "name": "CI/CD Pipeline Hardening",
-      "summary": "Build pipelines without dependency pinning, artefact signing, or runner isolation.",
+      "summary": "Build pipelines without dependency pinning, artifact signing, or runner isolation.",
       "sla": "90 days",
       "documentation": "processing-protection/processing-security-best-practices.md",
       "mappings": {

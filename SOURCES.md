@@ -228,7 +228,7 @@ Recorded here so they are not reintroduced.
 
 ## Adding a source
 
-1. Find the **primary** source — the report itself, not an article summarising it
+1. Find the **primary** source — the report itself, not an article summarizing it
 2. Record publisher, title, stable URL, and the edition or date
 3. Quote or closely paraphrase **what the source actually says**, not the
    strongest reading of it
@@ -237,7 +237,7 @@ Recorded here so they are not reintroduced.
    **S7** for the pattern)
 
 If a claim is useful but unsourceable, either present it explicitly as
-first-party experience — clearly labelled as such — or cut it. Do not present it
+first-party experience — clearly labeled as such — or cut it. Do not present it
 as an established finding.
 
 ---
